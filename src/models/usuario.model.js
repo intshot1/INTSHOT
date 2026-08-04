@@ -53,13 +53,7 @@ const usuarioSchema = new mongoose.Schema({
         default: 'Cliente'
     }
 
-}, {
-    timestamps: true // agrega createdAt y updatedAt automaticamente
-});
+},);
 
-// Representacion legible del usuario (equivalente al __str__  para visualizar el id, nombre y apellido del usuario).
-usuarioSchema.methods.toString = function () {
-    return `${this._id} - ${this.nombre} ${this.apellido}`;
-};
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
