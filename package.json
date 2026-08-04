@@ -1,0 +1,22 @@
+{
+  "name": "intshot",
+  "version": "1.0.0",
+  "description": "Sistema de inventario para gestión textil",
+  "license": "MIT",
+  "author": "Johan Montoya <montoyajohan100@gmail.com>",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.9.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "morgan": "^1.11.0",
+    "nodemon": "^3.1.14"
+  }
+}
