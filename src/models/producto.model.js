@@ -63,13 +63,7 @@ const productoSchema = new mongoose.Schema({
         default: null
     }
 
-}, {
-    timestamps: true
-});
+},);
 
-// Representacion legible del producto (equivalente al __str__ ).
-productoSchema.methods.toString = function () {
-    return `${this._id} - ${this.nombre} ${this.talla} - Color: ${this.color}`;
-};
 
 module.exports = mongoose.model('Producto', productoSchema);
