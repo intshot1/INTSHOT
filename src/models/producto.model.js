@@ -13,7 +13,8 @@ const productoSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
-        maxlength: [100, 'El nombre no puede superar los 100 caracteres']
+        maxlength: [100, 'El nombre no puede superar los 100 caracteres'],
+        unique: [true, 'El nombre debe ser unico']
     },
 
     // Color del producto.
