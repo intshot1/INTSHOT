@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Movimientos de Inventario</h1>
+                        <a class="btn btn-success" href="/movimientosInventario/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Nuevo Movimiento
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof movimientos !== "undefined") ? movimientos : []; %>
+                            <% lista.forEach(function(movimiento) { %>
+                                <tr>
+                                    <td>
+                                        <%=movimiento.producto.nombre%>
+                                    </td>
+                                    <td>
+                                        <% if (movimiento.tipo === "Entrada") { %>
+                                            <span class="badge bg-success"><%=movimiento.tipo%></span>
+                                        <% } else { %>
+                                            <span class="badge bg-danger"><%=movimiento.tipo%></span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <%=movimiento.cantidad%>
+                                    </td>
+                                    <td>
+                                        <%=movimiento.descripcion%>
+                                    </td>
+                                    <td>
+                                        <%=movimiento.fecha.toLocaleString('es-CO')%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Movimiento', 'Está seguro de eliminar el movimiento de <strong><%=movimiento.producto.nombre%></strong>?', '/movimientosInventario/<%=movimiento._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No hay movimientos registrados.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Compras a Proveedores</h1>
+                        <a class="btn btn-success" href="/compras/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Nueva Compra
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Proveedor</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof compras !== "undefined") ? compras : []; %>
+                            <% lista.forEach(function(compra) { %>
+                                <tr>
+                                    <td>
+                                        <%=compra.proveedor.nombre%>
+                                    </td>
+                                    <td>
+                                        <%=compra.fecha.toLocaleString('es-CO')%>
+                                    </td>
+                                    <td>
+                                        <% if (compra.estado === "Pendiente") { %>
+                                            <span class="badge bg-warning text-dark"><%=compra.estado%></span>
+                                        <% } else if (compra.estado === "Recibida") { %>
+                                            <span class="badge bg-success"><%=compra.estado%></span>
+                                        <% } else { %>
+                                            <span class="badge bg-info text-dark"><%=compra.estado%></span>
+                                        <% } %>
+                                    </td>
+                                    <td class="d-flex gap-1 flex-wrap">
+                                        <a href="/detalleCompras" class="btn btn-sm btn-outline-secondary">Ver Detalle</a>
+
+                                        <form action="/compras/<%=compra._id%>?_method=PUT" method="post" class="d-flex gap-1">
+                                            <select name="estado" class="form-select form-select-sm" style="width:180px;">
+                                                <option value="Pendiente" <% if (compra.estado === "Pendiente") { %>selected<% } %>>Pendiente</option>
+                                                <option value="Recibida" <% if (compra.estado === "Recibida") { %>selected<% } %>>Recibida</option>
+                                                <option value="Recibida parcialmente" <% if (compra.estado === "Recibida parcialmente") { %>selected<% } %>>Recibida parcialmente</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-success">Cambiar</button>
+                                        </form>
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Compra', 'Está seguro de eliminar la compra a <strong><%=compra.proveedor.nombre%></strong>?', '/compras/<%=compra._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No hay compras registradas.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Productos</h1>
+                        <a class="btn btn-success" href="/productos/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Crear Producto
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Imagen</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Color</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Talla</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof productos !== "undefined") ? productos : []; %>
+                            <% lista.forEach(function(producto) { %>
+                                <tr>
+                                    <td>
+                                        <% if (producto.imagen) { %>
+                                            <img src="<%=producto.imagen%>" alt="<%=producto.nombre%>" style="height:50px; width:50px; object-fit:cover; border-radius:6px;">
+                                        <% } else { %>
+                                            <img src="/img/Logo-INTSHOT.jpg" alt="Sin imagen" style="height:50px; width:50px; object-fit:cover; border-radius:6px; opacity:0.5;">
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <%=producto.nombre%>
+                                    </td>
+                                    <td>
+                                        <%=producto.color%>
+                                    </td>
+                                    <td>
+                                        <%=producto.descripcion%>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary"><%=producto.categoria%></span>
+                                    </td>
+                                    <td>
+                                        <%=producto.talla%>
+                                    </td>
+                                    <td>
+                                        <%=producto.stock%>
+                                    </td>
+                                    <td>
+                                        $<%=producto.precio%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm"
+                                            onclick="modalVer('<%=producto.nombre%>', '<%=producto.color%>', '<%=producto.talla%>', '<%=producto.categoria%>', '<%=producto.stock%>', '<%=producto.precio%>', '<%=producto.descripcion%>')"
+                                            data-bs-toggle="modal" data-bs-target="#ModalProductoVer">Ver detalles</button>
+
+                                        <button class="btn btn-info btn-sm"
+                                            onclick="modalEditar('<%=producto.nombre%>', '<%=producto.color%>', '<%=producto.talla%>', '<%=producto.categoria%>', '<%=producto.stock%>', '<%=producto.precio%>', '<%=producto.descripcion%>', '<%=producto.imagen%>')"
+                                            data-bs-toggle="modal" data-bs-target="#ModalProductoEditar">Editar</button>
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Producto', 'Está seguro de eliminar el producto <strong><%=producto.nombre%></strong>?', '/productos/<%=producto.nombre%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- ventana modal reutilizable para ver -->
+                <div class="modal fade" id="ModalProductoVer" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Información del producto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Nombre:</strong> <span id="nombreProducto"></span></p>
+                                <p><strong>Color:</strong> <span id="colorProducto"></span></p>
+                                <p><strong>Talla:</strong> <span id="tallaProducto"></span></p>
+                                <p><strong>Categoría:</strong> <span id="categoriaProducto"></span></p>
+                                <p><strong>Stock:</strong> <span id="stockProducto"></span></p>
+                                <p><strong>Precio:</strong> $<span id="precioProducto"></span></p>
+                                <p><strong>Descripción:</strong> <span id="descripcionProducto"></span></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ventana modal reutilizable para editar -->
+                <div class="modal fade" id="ModalProductoEditar" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar producto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="formEditarProducto" method="POST">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombreProductoEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Color</label>
+                                        <input type="text" name="color" class="form-control" id="colorProductoEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Descripción</label>
+                                        <input type="text" name="descripcion" class="form-control" id="descripcionProductoEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Categoría</label>
+                                        <select name="categoria" class="form-select" id="categoriaProductoEditar">
+                                            <option value="Camisetas">Camisetas</option>
+                                            <option value="Pantalones">Pantalones</option>
+                                            <option value="Chaquetas">Chaquetas</option>
+                                            <option value="Accesorios">Accesorios</option>
+                                            <option value="Insumos">Insumos</option>
+                                            <option value="Otros">Otros</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Talla</label>
+                                        <input type="text" name="talla" class="form-control" id="tallaProductoEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Stock</label>
+                                        <input type="number" min="0" max="999" name="stock" class="form-control" id="stockProductoEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Precio</label>
+                                        <input type="number" min="0" name="precio" class="form-control" id="precioProductoEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Imagen (url)</label>
+                                        <input type="text" name="imagen" class="form-control" id="imagenProductoEditar">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>
+
+<script>
+    function modalVer(nombre, color, talla, categoria, stock, precio, descripcion) {
+        document.getElementById("nombreProducto").textContent = nombre;
+        document.getElementById("colorProducto").textContent = color;
+        document.getElementById("tallaProducto").textContent = talla;
+        document.getElementById("categoriaProducto").textContent = categoria;
+        document.getElementById("stockProducto").textContent = stock;
+        document.getElementById("precioProducto").textContent = precio;
+        document.getElementById("descripcionProducto").textContent = descripcion;
+    }
+
+    function modalEditar(nombre, color, talla, categoria, stock, precio, descripcion, imagen) {
+        document.getElementById("nombreProductoEditar").value = nombre;
+        document.getElementById("colorProductoEditar").value = color;
+        document.getElementById("tallaProductoEditar").value = talla;
+        document.getElementById("categoriaProductoEditar").value = categoria;
+        document.getElementById("stockProductoEditar").value = stock;
+        document.getElementById("precioProductoEditar").value = precio;
+        document.getElementById("descripcionProductoEditar").value = descripcion;
+        document.getElementById("imagenProductoEditar").value = imagen;
+
+        document.getElementById("formEditarProducto").action = "/productos/" + nombre + "?_method=PUT";
+    }
+</script>
