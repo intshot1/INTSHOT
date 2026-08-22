@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg" style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0;">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <img src="/img/Logo-blanco.jpeg" alt="INTSHOT" width="36" height="36" style="border-radius:8px;">
+                <span style="font-weight:800; color:#003d9b;">INTSHOT</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLanding"
+                aria-controls="navbarLanding" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarLanding">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                    </li>
+                </ul>
+                <a class="btn btn-primary btn-sm" href="/login">Iniciar sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <%- include('../partials/notificaciones'); %>
+
+        <!-- Bienvenida -->
+        <section id="inicio" class="bienvenida">
+            <section class="welcome">
+                <div class="texto_bienvenida">
+                    <h2>Optimiza la gestión de tu inventario y pedidos con <strong>INTSHOT</strong></h2>
+                    <p>
+                        Un sistema diseñado especialmente para empresas textiles que buscan
+                        controlar insumos, productos terminados y pedidos de manera eficiente.
+                    </p>
+                    <ul>
+                        <li>&#10004; Registra clientes y pedidos fácilmente.</li>
+                        <li>&#10004; Supervisa tu inventario de materiales y prendas.</li>
+                        <li>&#10004; Accede a tus datos desde cualquier dispositivo.</li>
+                    </ul>
+                </div>
+
+                <div class="imagen_bienvenida">
+                    <img src="/img/INTSHOT.jpg" alt="INTSHOT">
+                </div>
+            </section>
+        </section>
+
+        <!-- Caracteristicas -->
+        <section id="caracteristicas" class="contenedor-principal">
+            <h2 style="color: #004aad">Características</h2>
+            <br>
+            <div class="cards">
+                <div class="card" style="width: 18rem;">
+                    <img src="/img/inventario.jpg" class="card-img-top" alt="Inventario">
+                    <div class="card-body">
+                        <h5 class="card-title">Inventario</h5>
+                        <p class="card-text">Control total de productos e insumos con actualizaciones en tiempo real.</p>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="/img/Clientes.avif" class="card-img-top" alt="Clientes">
+                    <div class="card-body">
+                        <h5 class="card-title">Pedidos y Clientes</h5>
+                        <p class="card-text">Registra, edita y consulta fácilmente los pedidos realizados por tus clientes.</p>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <img src="/img/Reportes.png" class="card-img-top" alt="Reportes">
+                    <div class="card-body">
+                        <h5 class="card-title">Reportes y Control</h5>
+                        <p class="card-text">Genera reportes detallados para mejorar la toma de decisiones y el control interno.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beneficios -->
+        <section id="beneficios" class="beneficios">
+            <h2>¿Por qué elegir INTSHOT?</h2>
+            <ul>
+                <li>&#128640; <strong>Rápido</strong> y con una interfaz moderna e intuitiva.</li>
+                <li>&#128274; <strong>Seguro</strong>, protege los datos de tu empresa.</li>
+                <li>&#129525; <strong>Ideal</strong> para talleres y empresas textiles.</li>
+            </ul>
+        </section>
+    </main>
+
+    <div class="footer">
+        &copy; 2025 INTSHOT - Todos los derechos reservados &middot;
+        <a href="/">INTSHOT</a>
+    </div>
+
+    <%- include('../partials/scripts'); %>
+</body>
+
+</html>

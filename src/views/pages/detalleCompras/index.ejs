@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Detalle de Compras</h1>
+                        <a class="btn btn-success" href="/detalleCompras/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Agregar Producto
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Compra</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Cantidad Pedida</th>
+                                <th>Cantidad Recibida</th>
+                                <th>Precio unitario</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof detalles !== "undefined") ? detalles : []; %>
+                            <% var total = 0; %>
+                            <% lista.forEach(function(detalle) { %>
+                                <% var subtotal = detalle.cantidad * parseFloat(detalle.precio_unitario); %>
+                                <% total = total + subtotal; %>
+                                <tr>
+                                    <td>
+                                        <%=detalle.compra._id%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.producto.nombre%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.producto.categoria%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.cantidad%>
+                                    </td>
+                                    <td>
+                                        <% if (detalle.cantidad_recibida < detalle.cantidad) { %>
+                                            <span class="text-danger fw-bold"><%=detalle.cantidad_recibida%></span>
+                                        <% } else { %>
+                                            <%=detalle.cantidad_recibida%>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        $<%=detalle.precio_unitario%>
+                                    </td>
+                                    <td>
+                                        $<%=subtotal%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm"
+                                            onclick="modalEditar('<%=detalle._id%>', '<%=detalle.cantidad%>', '<%=detalle.cantidad_recibida%>', '<%=detalle.precio_unitario%>')"
+                                            data-bs-toggle="modal" data-bs-target="#ModalDetalleEditar">Recibir</button>
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Producto', 'Está seguro de eliminar <strong><%=detalle.producto.nombre%></strong> de la compra?', '/detalleCompras/<%=detalle._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">No hay productos en las compras.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-end fw-bold">Total:</td>
+                                <td class="fw-bold">$<%=total%></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <a href="/compras" class="btn btn-outline-secondary">Volver a Compras</a>
+
+                </div>
+
+                <!-- ventana modal reutilizable para registrar lo recibido -->
+                <div class="modal fade" id="ModalDetalleEditar" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Recibir producto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="formEditarDetalle" method="POST">
+                                <div class="modal-body">
+                                    <p class="text-muted">Indique cuántas unidades llegaron realmente de este producto.</p>
+                                    <div class="mb-3">
+                                        <label class="form-label">Cantidad pedida</label>
+                                        <input type="number" name="cantidad" class="form-control" id="cantidadDetalleEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Cantidad recibida</label>
+                                        <input type="number" min="0" name="cantidad_recibida" class="form-control" id="recibidaDetalleEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Precio unitario</label>
+                                        <input type="number" min="0" step="0.01" name="precio_unitario" class="form-control" id="precioDetalleEditar">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>
+
+<script>
+    function modalEditar(id, cantidad, cantidadRecibida, precio) {
+        document.getElementById("cantidadDetalleEditar").value = cantidad;
+        document.getElementById("recibidaDetalleEditar").value = cantidadRecibida;
+        document.getElementById("precioDetalleEditar").value = precio;
+
+        document.getElementById("formEditarDetalle").action = "/detalleCompras/" + id + "?_method=PUT";
+    }
+</script>

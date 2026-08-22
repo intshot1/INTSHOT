@@ -1,0 +1,6 @@
+<% if (typeof mensaje !== "undefined" && mensaje !== "") { %>
+    <% var tipo = (mensaje.indexOf("Error") !== -1 || mensaje.indexOf("no encontrado") !== -1) ? "danger" : "success"; %>
+    <div class="alert alert-<%=tipo%>" role="alert">
+        <%=mensaje%>
+    </div>
+<% } %>

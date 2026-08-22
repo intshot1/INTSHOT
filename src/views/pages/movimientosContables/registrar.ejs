@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg py-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+
+                            <h1 class="display-4">Nuevo Movimiento Contable</h1>
+                            <p class="text-muted mb-4">Registre un ingreso o un egreso de la empresa.</p>
+
+                            <form action="/movimientosContables" method="post">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="tipo">Tipo de movimiento</label>
+                                            <select name="tipo" class="form-select" id="tipo" required>
+                                                <option value="">Seleccione el tipo</option>
+                                                <option value="Ingreso">Ingreso</option>
+                                                <option value="Egreso">Egreso</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="valor">Valor</label>
+                                            <input type="number" min="0" step="0.01" class="form-control" id="valor" name="valor" placeholder="Valor del movimiento" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="descripcion">Descripción</label>
+                                            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción del movimiento" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="pedido">Pedido relacionado (opcional)</label>
+                                            <% if (typeof pedidos !== "undefined") { %>
+                                                <select name="pedido" class="form-select" id="pedido">
+                                                    <option value="">Ninguno</option>
+                                                    <% pedidos.forEach(function(pedido) { %>
+                                                        <option value="<%=pedido._id%>"><%=pedido._id%> - <%=pedido.estado%></option>
+                                                    <% }); %>
+                                                </select>
+                                            <% } else { %>
+                                                <input type="text" class="form-control" id="pedido" name="pedido" placeholder="Id del pedido">
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="compra">Compra relacionada (opcional)</label>
+                                            <% if (typeof compras !== "undefined") { %>
+                                                <select name="compra" class="form-select" id="compra">
+                                                    <option value="">Ninguna</option>
+                                                    <% compras.forEach(function(compra) { %>
+                                                        <option value="<%=compra._id%>"><%=compra._id%> - <%=compra.estado%></option>
+                                                    <% }); %>
+                                                </select>
+                                            <% } else { %>
+                                                <input type="text" class="form-control" id="compra" name="compra" placeholder="Id de la compra">
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="col-12 mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-5">Guardar</button>
+                                        <a href="/movimientosContables" class="btn btn-outline-secondary px-5">Volver</a>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

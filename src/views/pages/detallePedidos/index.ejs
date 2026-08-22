@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Detalle de Pedidos</h1>
+                        <a class="btn btn-success" href="/detallePedidos/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Agregar Producto
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Pedido</th>
+                                <th>Cliente</th>
+                                <th>Producto</th>
+                                <th>Color</th>
+                                <th>Talla</th>
+                                <th>Cantidad</th>
+                                <th>Precio unitario</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof detalles !== "undefined") ? detalles : []; %>
+                            <% var total = 0; %>
+                            <% lista.forEach(function(detalle) { %>
+                                <% var subtotal = detalle.cantidad * parseFloat(detalle.precio_unitario); %>
+                                <% total = total + subtotal; %>
+                                <tr>
+                                    <td>
+                                        <%=detalle.pedido._id%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.pedido.usuario%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.producto.nombre%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.producto.color%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.producto.talla%>
+                                    </td>
+                                    <td>
+                                        <%=detalle.cantidad%>
+                                    </td>
+                                    <td>
+                                        $<%=detalle.precio_unitario%>
+                                    </td>
+                                    <td>
+                                        $<%=subtotal%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Detalle', 'Está seguro de eliminar <strong><%=detalle.producto.nombre%></strong> del pedido?', '/detallePedidos/<%=detalle._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted">No hay productos en los pedidos.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-end fw-bold">Total:</td>
+                                <td class="fw-bold">$<%=total%></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <a href="/pedidos" class="btn btn-outline-secondary">Volver a Pedidos</a>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

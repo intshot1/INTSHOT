@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <h1 class="display-4">Catálogo de Productos</h1>
+                    <br>
+
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <% var lista = (typeof productos !== "undefined") ? productos : []; %>
+                        <% lista.forEach(function(producto) { %>
+                            <div class="col">
+                                <div class="card h-100 shadow-sm">
+
+                                    <% if (producto.imagen) { %>
+                                        <img src="<%=producto.imagen%>" class="card-img-top producto-imagen" alt="<%=producto.nombre%>">
+                                    <% } else { %>
+                                        <div class="d-flex align-items-center justify-content-center bg-light" style="height:220px;">
+                                            <div class="text-center text-muted">
+                                                <img src="/img/Logo-INTSHOT.jpg" alt="Sin imagen" style="height:80px; opacity:0.4;">
+                                                <p class="mt-2 mb-0 small">Sin imagen</p>
+                                            </div>
+                                        </div>
+                                    <% } %>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%=producto.nombre%></h5>
+                                        <p class="card-text text-muted small"><%=producto.descripcion%></p>
+                                        <ul class="list-unstyled small">
+                                            <li><strong>Color:</strong> <%=producto.color%></li>
+                                            <li><strong>Talla:</strong> <%=producto.talla%></li>
+                                            <li><span class="badge bg-secondary"><%=producto.categoria%></span></li>
+                                            <li><strong>Stock:</strong> <%=producto.stock%> unidades</li>
+                                        </ul>
+                                        <p class="fs-5 text-success fw-bold">$<%=producto.precio%></p>
+                                    </div>
+
+                                    <div class="card-footer">
+                                        <form action="/carritos" method="post">
+                                            <input type="hidden" name="producto" value="<%=producto._id%>">
+                                            <input type="hidden" name="cantidad" value="1">
+                                            <button type="submit" class="btn btn-primary w-100" <% if (producto.stock <= 0) { %>disabled<% } %>>
+                                                Agregar al carrito
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        <% }); %>
+
+                        <% if (lista.length === 0) { %>
+                            <div class="col-12">
+                                <p class="text-center text-muted">No hay productos disponibles en este momento.</p>
+                            </div>
+                        <% } %>
+                    </div>
+
+                </div>
+
+            </main>
+
+            <%- include('../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../partials/scripts'); %>
+</body>
+
+</html>

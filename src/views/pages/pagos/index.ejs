@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Pagos</h1>
+                        <a class="btn btn-success" href="/pagos/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Registrar Pago
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Pedido</th>
+                                <th>Estado del pedido</th>
+                                <th>Valor</th>
+                                <th>Método</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof pagos !== "undefined") ? pagos : []; %>
+                            <% lista.forEach(function(pago) { %>
+                                <tr>
+                                    <td>
+                                        <%=pago.pedido._id%>
+                                    </td>
+                                    <td>
+                                        <%=pago.pedido.estado%>
+                                    </td>
+                                    <td>
+                                        $<%=pago.valor%>
+                                    </td>
+                                    <td>
+                                        <% if (pago.metodo === "Efectivo") { %>
+                                            <span class="badge bg-success"><%=pago.metodo%></span>
+                                        <% } else if (pago.metodo === "Tarjeta") { %>
+                                            <span class="badge bg-primary"><%=pago.metodo%></span>
+                                        <% } else { %>
+                                            <span class="badge bg-info text-dark"><%=pago.metodo%></span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <%=pago.fecha.toLocaleString('es-CO')%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Pago', 'Está seguro de eliminar el pago de <strong>$<%=pago.valor%></strong>?', '/pagos/<%=pago._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No hay pagos registrados.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>
