@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <h1 class="display-4">Mi Carrito</h1>
+                    <br>
+
+                    <% var lista = (typeof carrito !== "undefined") ? carrito : []; %>
+
+                    <% if (lista.length > 0) { %>
+
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Color</th>
+                                    <th>Talla</th>
+                                    <th>Precio unitario</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% var total = 0; %>
+                                <% lista.forEach(function(item) { %>
+                                    <% var subtotal = item.cantidad * parseFloat(item.producto.precio); %>
+                                    <% total = total + subtotal; %>
+                                    <tr>
+                                        <td>
+                                            <%=item.producto.nombre%>
+                                        </td>
+                                        <td>
+                                            <%=item.producto.color%>
+                                        </td>
+                                        <td>
+                                            <%=item.producto.talla%>
+                                        </td>
+                                        <td>
+                                            $<%=item.producto.precio%>
+                                        </td>
+                                        <td>
+                                            <form action="/carritos/<%=item._id%>?_method=PUT" method="post" class="d-flex gap-1">
+                                                <input type="number" name="cantidad" value="<%=item.cantidad%>" min="1" max="<%=item.producto.stock%>" class="form-control form-control-sm" style="width:70px;">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Actualizar</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            $<%=subtotal%>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Carrito', 'Está seguro de eliminar <strong><%=item.producto.nombre%></strong> del carrito?', '/carritos/<%=item._id%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-end fw-bold">Total:</td>
+                                    <td class="fw-bold">$<%=total%></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <a href="/catalogo" class="btn btn-outline-secondary">Seguir comprando</a>
+                            <a href="/pedidos/formulario" class="btn btn-success">Confirmar Pedido</a>
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="text-center mt-5">
+                            <p class="text-muted fs-5">Tu carrito está vacío.</p>
+                            <a href="/catalogo" class="btn btn-primary">Ver catálogo</a>
+                        </div>
+
+                    <% } %>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

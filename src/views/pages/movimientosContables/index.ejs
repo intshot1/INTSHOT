@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Contabilidad</h1>
+                        <a class="btn btn-success" href="/movimientosContables/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Nuevo Movimiento
+                        </a>
+                    </div>
+
+                    <%
+                        var lista = (typeof movimientos !== "undefined") ? movimientos : [];
+                        var totalIngresos = 0;
+                        var totalEgresos = 0;
+
+                        lista.forEach(function(movimiento) {
+                            if (movimiento.tipo === "Ingreso") {
+                                totalIngresos = totalIngresos + parseFloat(movimiento.valor);
+                            } else {
+                                totalEgresos = totalEgresos + parseFloat(movimiento.valor);
+                            }
+                        });
+
+                        var balance = totalIngresos - totalEgresos;
+                    %>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="material-symbols-outlined" style="color:#16a34a;">trending_up</span>
+                                    <p class="text-uppercase text-muted small fw-bold mt-2 mb-1">Total Ingresos</p>
+                                    <p class="card-text fs-4 fw-bold mb-0" style="color:#16a34a;">$<%=totalIngresos%></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="material-symbols-outlined" style="color:#ef4444;">trending_down</span>
+                                    <p class="text-uppercase text-muted small fw-bold mt-2 mb-1">Total Egresos</p>
+                                    <p class="card-text fs-4 fw-bold mb-0" style="color:#ef4444;">$<%=totalEgresos%></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <span class="material-symbols-outlined" style="color:<%= (balance >= 0) ? "#0052cc" : "#f59e0b" %>;">account_balance_wallet</span>
+                                    <p class="text-uppercase text-muted small fw-bold mt-2 mb-1">Balance</p>
+                                    <p class="card-text fs-4 fw-bold mb-0" style="color:<%= (balance >= 0) ? "#0052cc" : "#f59e0b" %>;">$<%=balance%></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Valor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% lista.forEach(function(movimiento) { %>
+                                <tr>
+                                    <td>
+                                        <%=movimiento.fecha.toLocaleString('es-CO')%>
+                                    </td>
+                                    <td>
+                                        <% if (movimiento.tipo === "Ingreso") { %>
+                                            <span class="badge bg-success"><%=movimiento.tipo%></span>
+                                        <% } else { %>
+                                            <span class="badge bg-danger"><%=movimiento.tipo%></span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <%=movimiento.descripcion%>
+                                    </td>
+                                    <td>
+                                        $<%=movimiento.valor%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Movimiento', 'Está seguro de eliminar el movimiento <strong><%=movimiento.descripcion%></strong>?', '/movimientosContables/<%=movimiento._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No hay movimientos contables registrados.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

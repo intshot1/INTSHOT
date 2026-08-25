@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Usuarios</h1>
+                        <a class="btn btn-success" href="/usuarios/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Crear Usuario
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Rol</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof usuarios !== "undefined") ? usuarios : []; %>
+                            <% lista.forEach(function(usuario) { %>
+                                <tr>
+                                    <td>
+                                        <%=usuario.nombre%>
+                                    </td>
+                                    <td>
+                                        <%=usuario.apellido%>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary"><%=usuario.rol%></span>
+                                    </td>
+                                    <td>
+                                        <%=usuario.correo%>
+                                    </td>
+                                    <td>
+                                        <%=usuario.telefono%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm"
+                                            onclick="modalEditar('<%=usuario.nombre%>', '<%=usuario.apellido%>', '<%=usuario.correo%>', '<%=usuario.telefono%>', '<%=usuario.rol%>')"
+                                            data-bs-toggle="modal" data-bs-target="#ModalUsuarioEditar">Editar</button>
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Usuario', 'Está seguro de eliminar el usuario <strong><%=usuario.nombre%></strong>?', '/usuarios/<%=usuario.correo%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- ventana modal reutilizable para editar -->
+                <div class="modal fade" id="ModalUsuarioEditar" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar usuario</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="formEditarUsuario" method="POST">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombreUsuarioEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Apellido</label>
+                                        <input type="text" name="apellido" class="form-control" id="apellidoUsuarioEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Correo</label>
+                                        <input type="email" name="correo" class="form-control" id="correoUsuarioEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="text" name="telefono" class="form-control" id="telefonoUsuarioEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Rol</label>
+                                        <select name="rol" class="form-select" id="rolUsuarioEditar">
+                                            <option value="Administrador">Administrador</option>
+                                            <option value="Empleado">Empleado</option>
+                                            <option value="Cliente">Cliente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>
+
+<script>
+    function modalEditar(nombre, apellido, correo, telefono, rol) {
+        document.getElementById("nombreUsuarioEditar").value = nombre;
+        document.getElementById("apellidoUsuarioEditar").value = apellido;
+        document.getElementById("correoUsuarioEditar").value = correo;
+        document.getElementById("telefonoUsuarioEditar").value = telefono;
+        document.getElementById("rolUsuarioEditar").value = rol;
+
+        document.getElementById("formEditarUsuario").action = "/usuarios/" + correo + "?_method=PUT";
+    }
+</script>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Pedidos</h1>
+                        <a class="btn btn-success" href="/pedidos/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Nuevo Pedido
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof pedidos !== "undefined") ? pedidos : []; %>
+                            <% lista.forEach(function(pedido) { %>
+                                <tr>
+                                    <td>
+                                        <%=pedido.usuario.nombre%> <%=pedido.usuario.apellido%>
+                                    </td>
+                                    <td>
+                                        <%=pedido.fecha.toLocaleString('es-CO')%>
+                                    </td>
+                                    <td>
+                                        <% if (pedido.estado === "Pendiente") { %>
+                                            <span class="badge bg-warning text-dark"><%=pedido.estado%></span>
+                                        <% } else if (pedido.estado === "En proceso") { %>
+                                            <span class="badge bg-info text-dark"><%=pedido.estado%></span>
+                                        <% } else if (pedido.estado === "Enviado") { %>
+                                            <span class="badge bg-primary"><%=pedido.estado%></span>
+                                        <% } else if (pedido.estado === "Entregado") { %>
+                                            <span class="badge bg-success"><%=pedido.estado%></span>
+                                        <% } else { %>
+                                            <span class="badge bg-secondary"><%=pedido.estado%></span>
+                                        <% } %>
+                                    </td>
+                                    <td class="d-flex gap-1 flex-wrap">
+                                        <a href="/detallePedidos" class="btn btn-sm btn-outline-secondary">Ver Detalle</a>
+
+                                        <form action="/pedidos/<%=pedido._id%>?_method=PUT" method="post" class="d-flex gap-1">
+                                            <select name="estado" class="form-select form-select-sm" style="width:130px;">
+                                                <option value="Pendiente" <% if (pedido.estado === "Pendiente") { %>selected<% } %>>Pendiente</option>
+                                                <option value="En proceso" <% if (pedido.estado === "En proceso") { %>selected<% } %>>En proceso</option>
+                                                <option value="Enviado" <% if (pedido.estado === "Enviado") { %>selected<% } %>>Enviado</option>
+                                                <option value="Entregado" <% if (pedido.estado === "Entregado") { %>selected<% } %>>Entregado</option>
+                                                <option value="Cancelado" <% if (pedido.estado === "Cancelado") { %>selected<% } %>>Cancelado</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary">Cambiar</button>
+                                        </form>
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Pedido', 'Está seguro de eliminar el pedido de <strong><%=pedido.usuario.nombre%></strong>?', '/pedidos/<%=pedido._id%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+
+                            <% if (lista.length === 0) { %>
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No hay pedidos registrados.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

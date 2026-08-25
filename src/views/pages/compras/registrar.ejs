@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg py-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+
+                            <h1 class="display-4">Nueva Compra</h1>
+                            <p class="text-muted mb-4">Seleccione el proveedor al que se le realiza la compra.</p>
+
+                            <form action="/compras" method="post">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="proveedor">Proveedor</label>
+                                            <% if (typeof proveedores !== "undefined") { %>
+                                                <select name="proveedor" class="form-select" id="proveedor" required>
+                                                    <option value="">Seleccione el proveedor</option>
+                                                    <% proveedores.forEach(function(proveedor) { %>
+                                                        <option value="<%=proveedor._id%>"><%=proveedor.nombre%> - <%=proveedor.correo%></option>
+                                                    <% }); %>
+                                                </select>
+                                            <% } else { %>
+                                                <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Id del proveedor" required>
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="estado">Estado</label>
+                                            <select name="estado" class="form-select" id="estado" required>
+                                                <option value="Pendiente">Pendiente</option>
+                                                <option value="Recibida">Recibida</option>
+                                                <option value="Recibida parcialmente">Recibida parcialmente</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="col-12 mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-5">Registrar Compra</button>
+                                        <a href="/compras" class="btn btn-outline-secondary px-5">Volver</a>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

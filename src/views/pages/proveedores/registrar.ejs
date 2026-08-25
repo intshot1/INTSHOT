@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg py-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+
+                            <h1 class="display-4">Crear Proveedor</h1>
+                            <p class="text-muted mb-4">Complete la información del proveedor.</p>
+
+                            <form action="/proveedores" method="post">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="nombre">Nombre del Proveedor</label>
+                                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del Proveedor" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="telefono">Teléfono</label>
+                                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono del Proveedor" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="correo">Correo electrónico</label>
+                                            <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo del Proveedor" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="col-12 mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-5">Guardar</button>
+                                        <a href="/proveedores" class="btn btn-outline-secondary px-5">Volver</a>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

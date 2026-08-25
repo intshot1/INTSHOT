@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg">
+
+                    <div class="page-header">
+                        <h1 class="display-4">Proveedores</h1>
+                        <a class="btn btn-success" href="/proveedores/formulario">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">add</span>
+                            Crear Proveedor
+                        </a>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Telefono</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <% var lista = (typeof proveedores !== "undefined") ? proveedores : []; %>
+                            <% lista.forEach(function(proveedor) { %>
+                                <tr>
+                                    <td>
+                                        <%=proveedor.nombre%>
+                                    </td>
+                                    <td>
+                                        <%=proveedor.telefono%>
+                                    </td>
+                                    <td>
+                                        <%=proveedor.correo%>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm"
+                                            onclick="modalEditar('<%=proveedor.nombre%>', '<%=proveedor.telefono%>', '<%=proveedor.correo%>')"
+                                            data-bs-toggle="modal" data-bs-target="#ModalProveedorEditar">Editar</button>
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="modal_eliminar('Proveedor', 'Está seguro de eliminar el proveedor <strong><%=proveedor.nombre%></strong>?', '/proveedores/<%=proveedor.correo%>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- ventana modal reutilizable para editar -->
+                <div class="modal fade" id="ModalProveedorEditar" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar proveedor</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="formEditarProveedor" method="POST">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombreProveedorEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="text" name="telefono" class="form-control" id="telefonoProveedorEditar">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Correo</label>
+                                        <input type="email" name="correo" class="form-control" id="correoProveedorEditar">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>
+
+<script>
+    function modalEditar(nombre, telefono, correo) {
+        document.getElementById("nombreProveedorEditar").value = nombre;
+        document.getElementById("telefonoProveedorEditar").value = telefono;
+        document.getElementById("correoProveedorEditar").value = correo;
+
+        document.getElementById("formEditarProveedor").action = "/proveedores/" + correo + "?_method=PUT";
+    }
+</script>

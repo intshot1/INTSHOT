@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg py-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+
+                            <h1 class="display-4">Nuevo Pedido</h1>
+                            <p class="text-muted mb-4">Seleccione el cliente que realiza el pedido.</p>
+
+                            <form action="/pedidos" method="post">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="usuario">Cliente</label>
+                                            <% if (typeof usuarios !== "undefined") { %>
+                                                <select name="usuario" class="form-select" id="usuario" required>
+                                                    <option value="">Seleccione el cliente</option>
+                                                    <% usuarios.forEach(function(usuario) { %>
+                                                        <option value="<%=usuario._id%>"><%=usuario.nombre%> <%=usuario.apellido%> - <%=usuario.correo%></option>
+                                                    <% }); %>
+                                                </select>
+                                            <% } else { %>
+                                                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Id del cliente" required>
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="estado">Estado</label>
+                                            <select name="estado" class="form-select" id="estado" required>
+                                                <option value="Pendiente">Pendiente</option>
+                                                <option value="En proceso">En proceso</option>
+                                                <option value="Enviado">Enviado</option>
+                                                <option value="Entregado">Entregado</option>
+                                                <option value="Cancelado">Cancelado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="col-12 mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-5">Guardar</button>
+                                        <a href="/pedidos" class="btn btn-outline-secondary px-5">Volver</a>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

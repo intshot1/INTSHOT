@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="container-lg py-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+
+                            <h1 class="display-4">Agregar al Carrito</h1>
+                            <p class="text-muted mb-4">Seleccione el producto y la cantidad que desea agregar.</p>
+
+                            <form action="/carritos" method="post">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="usuario">Usuario</label>
+                                            <% if (typeof usuarios !== "undefined") { %>
+                                                <select name="usuario" class="form-select" id="usuario" required>
+                                                    <option value="">Seleccione el usuario</option>
+                                                    <% usuarios.forEach(function(usuario) { %>
+                                                        <option value="<%=usuario._id%>"><%=usuario.nombre%> <%=usuario.apellido%> - <%=usuario.correo%></option>
+                                                    <% }); %>
+                                                </select>
+                                            <% } else { %>
+                                                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Id del usuario" required>
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="producto">Producto</label>
+                                            <% if (typeof productos !== "undefined") { %>
+                                                <select name="producto" class="form-select" id="producto" required>
+                                                    <option value="">Seleccione el producto</option>
+                                                    <% productos.forEach(function(producto) { %>
+                                                        <option value="<%=producto._id%>"><%=producto.nombre%> - <%=producto.talla%> - <%=producto.color%></option>
+                                                    <% }); %>
+                                                </select>
+                                            <% } else { %>
+                                                <input type="text" class="form-control" id="producto" name="producto" placeholder="Id del producto" required>
+                                            <% } %>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="cantidad">Cantidad</label>
+                                            <input type="number" min="1" class="form-control" id="cantidad" name="cantidad" value="1" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botones -->
+                                    <div class="col-12 mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-5">Guardar</button>
+                                        <a href="/carritos" class="btn btn-outline-secondary px-5">Volver</a>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../partials/notificaciones'); %>
+
+                <!-- Bienvenida -->
+                <section id="inicio" class="bienvenida">
+                    <section class="welcome">
+                        <div class="texto_bienvenida">
+                            <h2>Bienvenido a <strong>INTSHOT</strong></h2>
+                            <p>
+                                Un sistema diseñado especialmente para empresas textiles que buscan
+                                controlar insumos, productos terminados y pedidos de manera eficiente.
+                            </p>
+                            <ul>
+                                <li>&#10004; Registra clientes y pedidos fácilmente.</li>
+                                <li>&#10004; Supervisa tu inventario de materiales y prendas.</li>
+                                <li>&#10004; Accede a tus datos desde cualquier dispositivo.</li>
+                            </ul>
+                        </div>
+
+                        <div class="imagen_bienvenida">
+                            <img src="/img/INTSHOT.jpg" alt="INTSHOT">
+                        </div>
+                    </section>
+                </section>
+
+                <!-- Caracteristicas -->
+                <section id="caracteristicas" class="contenedor-principal">
+                    <h2 style="color: #003d9b">Características</h2>
+                    <br>
+                    <div class="cards">
+                        <div class="card" style="width: 18rem;">
+                            <img src="/img/inventario.jpg" class="card-img-top" alt="Inventario">
+                            <div class="card-body">
+                                <h5 class="card-title">Inventario</h5>
+                                <p class="card-text">Control total de productos e insumos con actualizaciones en tiempo real.</p>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <img src="/img/Clientes.avif" class="card-img-top" alt="Clientes">
+                            <div class="card-body">
+                                <h5 class="card-title">Pedidos y Clientes</h5>
+                                <p class="card-text">Registra, edita y consulta fácilmente los pedidos realizados por tus clientes.</p>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <img src="/img/Reportes.png" class="card-img-top" alt="Reportes">
+                            <div class="card-body">
+                                <h5 class="card-title">Reportes y Control</h5>
+                                <p class="card-text">Genera reportes detallados para mejorar la toma de decisiones y el control interno.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Beneficios -->
+                <section id="beneficios" class="beneficios">
+                    <h2>¿Por qué elegir INTSHOT?</h2>
+                    <ul>
+                        <li>&#128640; <strong>Rápido</strong> y con una interfaz moderna e intuitiva.</li>
+                        <li>&#128274; <strong>Seguro</strong>, protege los datos de tu empresa.</li>
+                        <li>&#129525; <strong>Ideal</strong> para talleres y empresas textiles.</li>
+                    </ul>
+                </section>
+
+            </main>
+
+            <%- include('../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../partials/scripts'); %>
+</body>
+
+</html>
