@@ -23,8 +23,20 @@ app.use(express.json());
 // Permite simular PUT/DELETE desde formularios HTML, que solo soportan GET/POST.
 app.use(methodOverride('_method'));
 
-// Rutas de autenticacion (landing, login, registro).
-app.use('/', require('./src/routes/auth.routes'));
+// Rutas de la aplicacion. Cada archivo agrupa las rutas de una entidad y
+// define la URL completa, por eso todos se montan sobre la raiz.
+app.use('/', require('./src/routes/auth.routes'));                  // landing, login, registro
+app.use('/', require('./src/routes/usuario.routes'));               // inicio y usuarios
+app.use('/', require('./src/routes/producto.routes'));              // catalogo y productos
+app.use('/', require('./src/routes/proveedor.routes'));             // proveedores
+app.use('/', require('./src/routes/compra.routes'));                // compras
+app.use('/', require('./src/routes/detalleCompra.routes'));         // detalles de compra
+app.use('/', require('./src/routes/pedido.routes'));                // pedidos
+app.use('/', require('./src/routes/detallePedido.routes'));         // detalles de pedido
+app.use('/', require('./src/routes/carrito.routes'));               // carrito de compras
+app.use('/', require('./src/routes/pago.routes'));                  // pagos
+app.use('/', require('./src/routes/movimientoInventario.routes'));  // movimientos de inventario
+app.use('/', require('./src/routes/movimientoContable.routes'));    // movimientos contables
 
 const PORT = process.env.PORT || 3000;
 
