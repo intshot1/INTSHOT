@@ -1,4 +1,5 @@
 const Usuario = require('../models/usuario.model');
+const emailService = require('../services/email.service');
 
 // Controlador de Usuario.
 
@@ -46,6 +47,22 @@ exports.registrar = async (req, res) => {
     }
 
     await Usuario.create(nuevoUsuario);
+
+    // Mismo aviso que en el registro publico: el usuario nuevo se entera por
+    // correo de que ya tiene una cuenta, aunque la haya creado un administrador.
+    await emailService.sendEmail(
+      nuevoUsuario.correo,
+      'Bienvenido a INTSHOT',
+      `Hola ${nuevoUsuario.nombre} ${nuevoUsuario.apellido},
+
+Se creo una cuenta para ti en INTSHOT.
+
+Correo de acceso: ${nuevoUsuario.correo}
+Rol asignado: ${nuevoUsuario.rol}
+
+Ya puedes iniciar sesion en el sistema.`
+    );
+
     res.render('pages/usuarios/registrar', { mensaje: "Usuario registrado exitosamente" });
 
   } catch (error) {

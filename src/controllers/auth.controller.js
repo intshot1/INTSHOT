@@ -1,5 +1,6 @@
 const Usuario = require('../models/usuario.model');
 const { generarToken } = require('../utils/jwt.util');
+const emailService = require('../services/email.service');
 
 // Controlador de autenticacion.
 
@@ -31,6 +32,20 @@ exports.registro = async (req, res) => {
     }
 
     await Usuario.create({ nombre, apellido, telefono, correo, password });
+
+    // Si el usuario se creo bien, le avisamos por correo.
+    await emailService.sendEmail(
+      correo,
+      'Bienvenido a INTSHOT',
+      `Hola ${nombre} ${apellido},
+
+Tu registro en INTSHOT se realizo correctamente.
+
+Ya puedes iniciar sesion con este correo: ${correo}
+
+Gracias por registrarte.`
+    );
+
     res.render('pages/login', { mensaje: "Registro exitoso, ya puedes iniciar sesion" });
   } catch (error) {
     res.render('pages/registro', { mensaje: "Error en el registro" });
