@@ -1,4 +1,6 @@
 const Pedido = require('../models/pedido.model');
+const Usuario = require('../models/usuario.model');
+const emailService = require('../services/email.service');
 
 /**
  * Controlador de Pedido.
@@ -42,7 +44,30 @@ exports.registrar = async (req, res) => {
       estado: req.body.estado
     }
 
-    await Pedido.create(nuevoPedido);
+    const pedido = await Pedido.create(nuevoPedido);
+
+    // El pedido guarda el _id del usuario, no su correo: lo buscamos para
+    // saber a que direccion mandar la confirmacion.
+    const usuario = await Usuario.findById(pedido.usuario);
+
+    if (usuario) {
+      await emailService.sendEmail(
+        usuario.correo,
+        'Confirmacion de tu pedido en INTSHOT',
+        `Hola ${usuario.nombre} ${usuario.apellido},
+
+Recibimos tu pedido correctamente.
+
+Numero de pedido: ${pedido._id}
+Fecha: ${pedido.fecha.toLocaleDateString('es-CO')}
+Estado: ${pedido.estado}
+
+Te avisaremos cuando cambie el estado de tu pedido.
+
+Gracias por comprar en INTSHOT.`
+      );
+    }
+
     res.render('pages/pedidos/registrar', { mensaje: "Pedido registrado exitosamente" });
 
   } catch (error) {
