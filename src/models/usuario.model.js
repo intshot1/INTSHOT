@@ -62,14 +62,13 @@ const usuarioSchema = new mongoose.Schema({
 // se guardara el usuario por cualquier otro motivo (ej. actualizar el rol)
 // se volveria a hashear un password que ya estaba hasheado, dejandolo
 // irreconocible y bloqueando el login.
-usuarioSchema.pre('save', async function (next) {
+usuarioSchema.pre('save', async function () {
     if (!this.isModified('password')) {
-        return next();
+        return;
     }
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
 });
 
 // Usuario.updateOne() y Usuario.findOneAndUpdate() son "query middleware":
@@ -78,12 +77,12 @@ usuarioSchema.pre('save', async function (next) {
 // porque usuario.controller.js#actualizar usa updateOne(): sin este segundo
 // hook, si un administrador cambia el password de alguien desde el panel,
 // quedaria guardado en texto plano sin que nada lo evite.
-usuarioSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
+usuarioSchema.pre(['updateOne', 'findOneAndUpdate'], async function () {
     const update = this.getUpdate();
     const nuevaPassword = update?.password ?? update?.$set?.password;
 
     if (!nuevaPassword) {
-        return next();
+        return;
     }
 
     const hash = await bcrypt.hash(nuevaPassword, 10);
@@ -93,8 +92,6 @@ usuarioSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
     } else {
         update.$set.password = hash;
     }
-
-    next();
 });
 
 // Compara un password en texto plano (lo que escribe el usuario en el form)
