@@ -7,6 +7,9 @@
     </div>
     <div class="topbar-user">
         <span class="material-symbols-outlined" style="font-size: 20px;">account_circle</span>
-        <span>INTSHOT &middot; Usuario</span>
+        <% if (usuario) { %>
+            <span><%= usuario.nombre %> &middot; <%= usuario.rol %></span>
+        <% } %>
+        <%- include('tema_switch'); %>
     </div>
 </header>

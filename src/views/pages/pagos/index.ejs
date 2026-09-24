@@ -29,57 +29,59 @@
                         </a>
                     </div>
 
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th>Pedido</th>
-                                <th>Estado del pedido</th>
-                                <th>Valor</th>
-                                <th>Método</th>
-                                <th>Fecha</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% var lista = (typeof pagos !== "undefined") ? pagos : []; %>
-                            <% lista.forEach(function(pago) { %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%=pago.pedido._id%>
-                                    </td>
-                                    <td>
-                                        <%=pago.pedido.estado%>
-                                    </td>
-                                    <td>
-                                        $<%=pago.valor%>
-                                    </td>
-                                    <td>
-                                        <% if (pago.metodo === "Efectivo") { %>
-                                            <span class="badge bg-success"><%=pago.metodo%></span>
-                                        <% } else if (pago.metodo === "Tarjeta") { %>
-                                            <span class="badge bg-primary"><%=pago.metodo%></span>
-                                        <% } else { %>
-                                            <span class="badge bg-info text-dark"><%=pago.metodo%></span>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <%=pago.fecha.toLocaleString('es-CO')%>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="modal_eliminar('Pago', 'Está seguro de eliminar el pago de <strong>$<%=pago.valor%></strong>?', '/pagos/<%=pago._id%>')"
-                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                    </td>
+                                    <th>Pedido</th>
+                                    <th>Estado del pedido</th>
+                                    <th>Valor</th>
+                                    <th>Método</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            <% }); %>
-
-                            <% if (lista.length === 0) { %>
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No hay pagos registrados.</td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% var lista = (typeof pagos !== "undefined") ? pagos : []; %>
+                                <% lista.forEach(function(pago) { %>
+                                    <tr>
+                                        <td>
+                                            <%=pago.pedido._id%>
+                                        </td>
+                                        <td>
+                                            <%=pago.pedido.estado%>
+                                        </td>
+                                        <td>
+                                            <%= pesos(pago.valor) %>
+                                        </td>
+                                        <td>
+                                            <% if (pago.metodo === "Efectivo") { %>
+                                                <span class="badge bg-success"><%=pago.metodo%></span>
+                                            <% } else if (pago.metodo === "Tarjeta") { %>
+                                                <span class="badge bg-primary"><%=pago.metodo%></span>
+                                            <% } else { %>
+                                                <span class="badge bg-info text-dark"><%=pago.metodo%></span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%=pago.fecha.toLocaleString('es-CO')%>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Pago', 'Está seguro de eliminar el pago de <strong><%= pesos(pago.valor) %></strong>?', '/pagos/<%=pago._id%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+    
+                                <% if (lista.length === 0) { %>
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">No hay pagos registrados.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 

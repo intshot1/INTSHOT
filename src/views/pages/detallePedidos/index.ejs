@@ -29,73 +29,77 @@
                         </a>
                     </div>
 
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th>Pedido</th>
-                                <th>Cliente</th>
-                                <th>Producto</th>
-                                <th>Color</th>
-                                <th>Talla</th>
-                                <th>Cantidad</th>
-                                <th>Precio unitario</th>
-                                <th>Subtotal</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% var lista = (typeof detalles !== "undefined") ? detalles : []; %>
-                            <% var total = 0; %>
-                            <% lista.forEach(function(detalle) { %>
-                                <% var subtotal = detalle.cantidad * parseFloat(detalle.precio_unitario); %>
-                                <% total = total + subtotal; %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%=detalle.pedido._id%>
-                                    </td>
-                                    <td>
-                                        <%=detalle.pedido.usuario%>
-                                    </td>
-                                    <td>
-                                        <%=detalle.producto.nombre%>
-                                    </td>
-                                    <td>
-                                        <%=detalle.producto.color%>
-                                    </td>
-                                    <td>
-                                        <%=detalle.producto.talla%>
-                                    </td>
-                                    <td>
-                                        <%=detalle.cantidad%>
-                                    </td>
-                                    <td>
-                                        $<%=detalle.precio_unitario%>
-                                    </td>
-                                    <td>
-                                        $<%=subtotal%>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="modal_eliminar('Detalle', 'Está seguro de eliminar <strong><%=detalle.producto.nombre%></strong> del pedido?', '/detallePedidos/<%=detalle._id%>')"
-                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                    </td>
+                                    <th>Pedido</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Color</th>
+                                    <th>Talla</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio unitario</th>
+                                    <th>Subtotal</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            <% }); %>
-
-                            <% if (lista.length === 0) { %>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% var lista = (typeof detalles !== "undefined") ? detalles : []; %>
+                                <% var total = 0; %>
+                                <% lista.forEach(function(detalle) { %>
+                                    <% var subtotal = detalle.cantidad * parseFloat(detalle.precio_unitario); %>
+                                    <% total = total + subtotal; %>
+                                    <tr>
+                                        <td>
+                                            <%=detalle.pedido._id%>
+                                        </td>
+                                        <td>
+                                            <%=detalle.pedido.usuario%>
+                                        </td>
+                                        <td>
+                                            <%=detalle.producto.nombre%>
+                                        </td>
+                                        <td>
+                                            <%=detalle.producto.color%>
+                                        </td>
+                                        <td>
+                                            <%=detalle.producto.talla%>
+                                        </td>
+                                        <td>
+                                            <%=detalle.cantidad%>
+                                        </td>
+                                        <td>
+                                            <%= pesos(detalle.precio_unitario) %>
+                                        </td>
+                                        <td>
+                                            <%= pesos(subtotal) %>
+                                        </td>
+                                        <td>
+                                            <% if (usuario.rol !== "Cliente") { %>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Detalle', 'Está seguro de eliminar <strong><%=detalle.producto.nombre%></strong> del pedido?', '/detallePedidos/<%=detalle._id%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+    
+                                <% if (lista.length === 0) { %>
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted">No hay productos en los pedidos.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                            <tfoot>
                                 <tr>
-                                    <td colspan="9" class="text-center text-muted">No hay productos en los pedidos.</td>
+                                    <td colspan="7" class="text-end fw-bold">Total:</td>
+                                    <td class="fw-bold"><%= pesos(total) %></td>
+                                    <td></td>
                                 </tr>
-                            <% } %>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="7" class="text-end fw-bold">Total:</td>
-                                <td class="fw-bold">$<%=total%></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
 
                     <a href="/pedidos" class="btn btn-outline-secondary">Volver a Pedidos</a>
 

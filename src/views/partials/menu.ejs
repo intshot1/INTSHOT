@@ -1,3 +1,11 @@
+<%
+    // Rol del usuario logueado. Cada grupo del menu solo se muestra a los roles
+    // que tienen permiso para entrar (los mismos que exige el middleware en las rutas).
+    var rol = usuario ? usuario.rol : "";
+    var esAdmin = rol === "Administrador";
+    var esPersonal = rol === "Administrador" || rol === "Empleado";
+    var esCliente = rol === "Cliente";
+%>
 <aside class="app-sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="appSidebar" aria-labelledby="appSidebarLabel">
 
     <div class="sidebar-brand">
@@ -15,79 +23,92 @@
             <span>Inicio</span>
         </a>
 
-        <a class="sidebar-link" href="/usuarios">
-            <span class="material-symbols-outlined">group</span>
-            <span>Usuarios</span>
-        </a>
+        <% if (esAdmin) { %>
+            <a class="sidebar-link" href="/usuarios">
+                <span class="material-symbols-outlined">group</span>
+                <span>Usuarios</span>
+            </a>
+        <% } %>
 
-        <p class="nav-group-label">Inventario</p>
+        <% if (esPersonal) { %>
+            <p class="nav-group-label">Inventario</p>
 
-        <a class="sidebar-link sidebar-sublink" href="/productos">
-            <span class="material-symbols-outlined">inventory_2</span>
-            <span>Productos</span>
-        </a>
+            <a class="sidebar-link sidebar-sublink" href="/productos">
+                <span class="material-symbols-outlined">inventory_2</span>
+                <span>Productos</span>
+            </a>
 
-        <a class="sidebar-link sidebar-sublink" href="/movimientosInventario">
-            <span class="material-symbols-outlined">sync_alt</span>
-            <span>Movimientos</span>
-        </a>
+            <a class="sidebar-link sidebar-sublink" href="/movimientosInventario">
+                <span class="material-symbols-outlined">sync_alt</span>
+                <span>Movimientos</span>
+            </a>
 
-        <p class="nav-group-label">Compras</p>
+            <p class="nav-group-label">Compras</p>
 
-        <a class="sidebar-link sidebar-sublink" href="/compras">
-            <span class="material-symbols-outlined">shopping_bag</span>
-            <span>Ver Compras</span>
-        </a>
+            <a class="sidebar-link sidebar-sublink" href="/compras">
+                <span class="material-symbols-outlined">shopping_bag</span>
+                <span>Ver Compras</span>
+            </a>
 
-        <a class="sidebar-link sidebar-sublink" href="/compras/formulario">
-            <span class="material-symbols-outlined">add_shopping_cart</span>
-            <span>Nueva Compra</span>
-        </a>
+            <a class="sidebar-link sidebar-sublink" href="/compras/formulario">
+                <span class="material-symbols-outlined">add_shopping_cart</span>
+                <span>Nueva Compra</span>
+            </a>
 
-        <a class="sidebar-link" href="/proveedores">
-            <span class="material-symbols-outlined">local_shipping</span>
-            <span>Proveedores</span>
-        </a>
+            <a class="sidebar-link" href="/proveedores">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span>Proveedores</span>
+            </a>
 
-        <a class="sidebar-link" href="/pedidos">
-            <span class="material-symbols-outlined">receipt_long</span>
-            <span>Pedidos</span>
-        </a>
+            <a class="sidebar-link" href="/pedidos">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span>Pedidos</span>
+            </a>
 
-        <a class="sidebar-link" href="/pagos">
-            <span class="material-symbols-outlined">payments</span>
-            <span>Pagos</span>
-        </a>
+            <a class="sidebar-link" href="/pagos">
+                <span class="material-symbols-outlined">payments</span>
+                <span>Pagos</span>
+            </a>
+        <% } %>
 
-        <a class="sidebar-link" href="/movimientosContables">
-            <span class="material-symbols-outlined">account_balance</span>
-            <span>Contabilidad</span>
-        </a>
+        <% if (esAdmin) { %>
+            <a class="sidebar-link" href="/movimientosContables">
+                <span class="material-symbols-outlined">account_balance</span>
+                <span>Contabilidad</span>
+            </a>
+        <% } %>
 
-        <p class="nav-group-label">Tienda</p>
+        <% if (esCliente) { %>
+            <a class="sidebar-link" href="/catalogo">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span>Catálogo</span>
+            </a>
 
-        <a class="sidebar-link sidebar-sublink" href="/catalogo">
-            <span class="material-symbols-outlined">menu_book</span>
-            <span>Catalogo</span>
-        </a>
+            <a class="sidebar-link" href="/carritos">
+                <span class="material-symbols-outlined">shopping_cart</span>
+                <span>Carrito</span>
+            </a>
 
-        <a class="sidebar-link sidebar-sublink" href="/carritos">
-            <span class="material-symbols-outlined">shopping_cart</span>
-            <span>Carrito</span>
-        </a>
+            <a class="sidebar-link" href="/pedidos">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span>Mis Pedidos</span>
+            </a>
+        <% } %>
     </nav>
 
     <div class="sidebar-footer">
-        <div class="sidebar-user">
-            <div class="avatar">I</div>
-            <div class="user-meta">
-                <p class="user-name">INTSHOT</p>
-                <p class="user-role">Usuario</p>
+        <% if (usuario) { %>
+            <div class="sidebar-user">
+                <div class="avatar"><%= usuario.nombre.charAt(0) %></div>
+                <div class="user-meta">
+                    <p class="user-name"><%= usuario.nombre %></p>
+                    <p class="user-role"><%= usuario.rol %></p>
+                </div>
             </div>
-        </div>
-        <a class="sidebar-logout" href="/">
+        <% } %>
+        <a class="sidebar-logout" href="/logout">
             <span class="material-symbols-outlined">logout</span>
-            <span>Cerrar sesion</span>
+            <span>Cerrar sesión</span>
         </a>
     </div>
 </aside>

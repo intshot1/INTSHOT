@@ -1,6 +1,19 @@
 <% if (typeof mensaje !== "undefined" && mensaje !== "") { %>
-    <% var tipo = (mensaje.indexOf("Error") !== -1 || mensaje.indexOf("no encontrado") !== -1) ? "danger" : "success"; %>
-    <div class="alert alert-<%=tipo%>" role="alert">
-        <%=mensaje%>
+    <%
+        // El color del aviso se decide por el texto del mensaje:
+        // rojo para errores, amarillo para advertencias y verde para lo demas.
+        var tipo = "success";
+        var icono = "check_circle";
+        if (mensaje.indexOf("Error") !== -1 || mensaje.indexOf("no encontrado") !== -1) {
+            tipo = "danger";
+            icono = "error";
+        } else if (mensaje.indexOf("permiso") !== -1 || mensaje.indexOf("disponible") !== -1 || mensaje.indexOf("Debes") !== -1) {
+            tipo = "warning";
+            icono = "warning";
+        }
+    %>
+    <div class="alert alert-<%= tipo %> d-flex align-items-center" role="alert">
+        <span class="material-symbols-outlined flex-shrink-0 me-2" style="font-size:20px;"><%= icono %></span>
+        <div><%= mensaje %></div>
     </div>
 <% } %>

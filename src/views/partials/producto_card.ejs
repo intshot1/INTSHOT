@@ -1,0 +1,37 @@
+<%# Tarjeta de un producto en la grilla del catalogo. Necesita la variable "producto". %>
+<div class="col">
+    <div class="producto-card">
+
+        <a href="/catalogo/<%= producto._id %>" class="producto-card-imagen" title="Ver detalle de <%= producto.nombre %>">
+            <% if (producto.imagen) { %>
+                <img src="<%= producto.imagen %>" alt="<%= producto.nombre %>">
+            <% } else { %>
+                <img src="/img/Logo-INTSHOT.jpg" alt="Sin imagen" class="producto-sin-imagen">
+            <% } %>
+
+            <% if (producto.stock <= 5) { %>
+                <span class="badge producto-badge-stock bg-warning text-dark">Pocas unidades</span>
+            <% } %>
+        </a>
+
+        <div class="producto-card-body">
+            <span class="badge producto-badge-categoria"><%= producto.categoria %></span>
+            <h3 class="producto-card-title">
+                <a href="/catalogo/<%= producto._id %>" class="producto-card-enlace"><%= producto.nombre %></a>
+            </h3>
+            <span class="producto-card-precio"><%= pesos(producto.precio) %></span>
+        </div>
+
+        <div class="producto-card-footer">
+            <a href="/catalogo/<%= producto._id %>" class="btn btn-outline-primary producto-btn-detalle">
+                <span class="material-symbols-outlined">visibility</span>
+                Ver detalle
+            </a>
+            <a href="/carritos/agregar/<%= producto._id %>" class="btn btn-primary producto-btn-agregar"
+                title="Agregar '<%= producto.nombre %>' al carrito" aria-label="Agregar <%= producto.nombre %> al carrito">
+                <span class="material-symbols-outlined">add_shopping_cart</span>
+            </a>
+        </div>
+
+    </div>
+</div>

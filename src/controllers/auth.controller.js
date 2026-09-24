@@ -1,6 +1,7 @@
 const Usuario = require('../models/usuario.model');
 const { generarToken } = require('../utils/jwt.util');
 const emailService = require('../services/email.service');
+const { usuarioLogueado } = require('../middlewares/auth.middleware');
 
 // Controlador de autenticacion.
 
@@ -10,8 +11,18 @@ exports.landing = async (req, res) => {
 }
 
 // Muestra el formulario de inicio de sesion (pages/login.ejs).
+// Si ya hay una sesion abierta, lo manda directo al inicio del panel.
 exports.mostrarLogin = async (req, res) => {
+  if (usuarioLogueado(req)) {
+    return res.redirect('/inicio');
+  }
   res.render('pages/login', { mensaje: "" });
+}
+
+// Cierra la sesion borrando la cookie con el token.
+exports.logout = async (req, res) => {
+  res.clearCookie('token');
+  res.render('pages/login', { mensaje: "Sesión cerrada" });
 }
 
 // Muestra el formulario de registro publico (pages/registro.ejs).
@@ -80,9 +91,9 @@ exports.login = async (req, res) => {
 
       res.redirect('/inicio');
     } else {
-      res.render('pages/landing', { mensaje: "Usuario o contraseña incorrectos" });
+      res.render('pages/login', { mensaje: "Error: usuario o contraseña incorrectos" });
     }
   } catch (error) {
-    res.render('pages/landing', { mensaje: "Error al iniciar sesion" });
+    res.render('pages/login', { mensaje: "Error al iniciar sesion" });
   }
 }

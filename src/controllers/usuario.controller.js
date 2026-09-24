@@ -4,9 +4,9 @@ const emailService = require('../services/email.service');
 // Controlador de Usuario.
 
 
-// Renderiza el listado principal de usuarios (vista tipo "index").
+// Renderiza la pagina de inicio del panel.
 exports.home = async (req, res) => {
-  res.render('pages/usuarios/index', { mensaje: "" });
+  res.render('pages/inicio', { mensaje: "" });
 }
 
 // Renderiza el formulario vacio para registrar un nuevo usuario.

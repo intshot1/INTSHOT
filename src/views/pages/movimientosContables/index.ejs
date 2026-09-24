@@ -51,7 +51,7 @@
                                 <div class="card-body">
                                     <span class="material-symbols-outlined" style="color:#16a34a;">trending_up</span>
                                     <p class="text-uppercase text-muted small fw-bold mt-2 mb-1">Total Ingresos</p>
-                                    <p class="card-text fs-4 fw-bold mb-0" style="color:#16a34a;">$<%=totalIngresos%></p>
+                                    <p class="card-text fs-4 fw-bold mb-0" style="color:#16a34a;"><%= pesos(totalIngresos) %></p>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                                 <div class="card-body">
                                     <span class="material-symbols-outlined" style="color:#ef4444;">trending_down</span>
                                     <p class="text-uppercase text-muted small fw-bold mt-2 mb-1">Total Egresos</p>
-                                    <p class="card-text fs-4 fw-bold mb-0" style="color:#ef4444;">$<%=totalEgresos%></p>
+                                    <p class="card-text fs-4 fw-bold mb-0" style="color:#ef4444;"><%= pesos(totalEgresos) %></p>
                                 </div>
                             </div>
                         </div>
@@ -69,56 +69,58 @@
                                 <div class="card-body">
                                     <span class="material-symbols-outlined" style="color:<%= (balance >= 0) ? "#0052cc" : "#f59e0b" %>;">account_balance_wallet</span>
                                     <p class="text-uppercase text-muted small fw-bold mt-2 mb-1">Balance</p>
-                                    <p class="card-text fs-4 fw-bold mb-0" style="color:<%= (balance >= 0) ? "#0052cc" : "#f59e0b" %>;">$<%=balance%></p>
+                                    <p class="card-text fs-4 fw-bold mb-0" style="color:<%= (balance >= 0) ? "#0052cc" : "#f59e0b" %>;"><%= pesos(balance) %></p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Tipo</th>
-                                <th>Descripción</th>
-                                <th>Valor</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% lista.forEach(function(movimiento) { %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%=movimiento.fecha.toLocaleString('es-CO')%>
-                                    </td>
-                                    <td>
-                                        <% if (movimiento.tipo === "Ingreso") { %>
-                                            <span class="badge bg-success"><%=movimiento.tipo%></span>
-                                        <% } else { %>
-                                            <span class="badge bg-danger"><%=movimiento.tipo%></span>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <%=movimiento.descripcion%>
-                                    </td>
-                                    <td>
-                                        $<%=movimiento.valor%>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="modal_eliminar('Movimiento', 'Está seguro de eliminar el movimiento <strong><%=movimiento.descripcion%></strong>?', '/movimientosContables/<%=movimiento._id%>')"
-                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                    </td>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Valor</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            <% }); %>
-
-                            <% if (lista.length === 0) { %>
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">No hay movimientos contables registrados.</td>
-                                </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% lista.forEach(function(movimiento) { %>
+                                    <tr>
+                                        <td>
+                                            <%=movimiento.fecha.toLocaleString('es-CO')%>
+                                        </td>
+                                        <td>
+                                            <% if (movimiento.tipo === "Ingreso") { %>
+                                                <span class="badge bg-success"><%=movimiento.tipo%></span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger"><%=movimiento.tipo%></span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%=movimiento.descripcion%>
+                                        </td>
+                                        <td>
+                                            <%= pesos(movimiento.valor) %>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Movimiento', 'Está seguro de eliminar el movimiento <strong><%=movimiento.descripcion%></strong>?', '/movimientosContables/<%=movimiento._id%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+    
+                                <% if (lista.length === 0) { %>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No hay movimientos contables registrados.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 

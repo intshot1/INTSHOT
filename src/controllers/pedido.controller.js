@@ -16,10 +16,13 @@ exports.formulario = async (req, res) => {
   res.render('pages/pedidos/registrar', { mensaje: "" });
 }
 
-// Lista todos los pedidos, mostrando el usuario relacionado (populate).
+// Lista los pedidos, mostrando el usuario relacionado (populate).
+// El cliente solo ve sus propios pedidos ("Mis Pedidos"); el administrador
+// y el empleado ven todos.
 exports.consultar = async (req, res) => {
   try {
-    const pedidos = await Pedido.find().populate('usuario');
+    const filtro = req.usuario.rol === 'Cliente' ? { usuario: req.usuario.id } : {};
+    const pedidos = await Pedido.find(filtro).sort({ fecha: -1 }).populate('usuario');
     res.render('pages/pedidos/index', { pedidos: pedidos, mensaje: "" });
   } catch (error) {
     res.status(500).json({ error: error.message });
