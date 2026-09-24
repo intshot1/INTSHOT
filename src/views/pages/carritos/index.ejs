@@ -19,86 +19,117 @@
 
                 <%- include('../../partials/notificaciones'); %>
 
-                <div class="container-lg">
+                <div class="page-header">
+                    <div>
+                        <h1 class="display-4">Mi Carrito</h1>
+                        <p class="text-muted small mb-0">Revisa tus productos antes de confirmar el pedido.</p>
+                    </div>
+                </div>
 
-                    <h1 class="display-4">Mi Carrito</h1>
-                    <br>
+                <%
+                    // Se descartan las lineas cuyo producto ya fue eliminado del inventario.
+                    var lista = (typeof carrito !== "undefined") ? carrito.filter(function(item) { return item.producto; }) : [];
+                    var total = 0;
+                %>
 
-                    <% var lista = (typeof carrito !== "undefined") ? carrito : []; %>
+                <% if (lista.length > 0) { %>
+                <div class="row g-4">
 
-                    <% if (lista.length > 0) { %>
+                    <!-- Lista de productos del carrito -->
+                    <div class="col-lg-8">
+                        <div class="carrito-lista">
+                            <% lista.forEach(function(item) { %>
+                                <% var subtotal = item.cantidad * Number(item.producto.precio.toString()); %>
+                                <% total = total + subtotal; %>
+                                <div class="carrito-item">
 
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Color</th>
-                                    <th>Talla</th>
-                                    <th>Precio unitario</th>
-                                    <th>Cantidad</th>
-                                    <th>Subtotal</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                                <% var total = 0; %>
-                                <% lista.forEach(function(item) { %>
-                                    <% var subtotal = item.cantidad * parseFloat(item.producto.precio); %>
-                                    <% total = total + subtotal; %>
-                                    <tr>
-                                        <td>
-                                            <%=item.producto.nombre%>
-                                        </td>
-                                        <td>
-                                            <%=item.producto.color%>
-                                        </td>
-                                        <td>
-                                            <%=item.producto.talla%>
-                                        </td>
-                                        <td>
-                                            $<%=item.producto.precio%>
-                                        </td>
-                                        <td>
-                                            <form action="/carritos/<%=item._id%>?_method=PUT" method="post" class="d-flex gap-1">
-                                                <input type="number" name="cantidad" value="<%=item.cantidad%>" min="1" max="<%=item.producto.stock%>" class="form-control form-control-sm" style="width:70px;">
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">Actualizar</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            $<%=subtotal%>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm"
-                                                onclick="modal_eliminar('Carrito', 'Está seguro de eliminar <strong><%=item.producto.nombre%></strong> del carrito?', '/carritos/<%=item._id%>')"
-                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="5" class="text-end fw-bold">Total:</td>
-                                    <td class="fw-bold">$<%=total%></td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                    <div class="carrito-item-imagen">
+                                        <% if (item.producto.imagen) { %>
+                                            <img src="<%= item.producto.imagen %>" alt="<%= item.producto.nombre %>">
+                                        <% } else { %>
+                                            <img src="/img/Logo-INTSHOT.jpg" alt="Sin imagen" style="opacity:.35;">
+                                        <% } %>
+                                    </div>
 
-                        <div class="d-flex justify-content-end gap-2 mt-3">
-                            <a href="/catalogo" class="btn btn-outline-secondary">Seguir comprando</a>
-                            <a href="/pedidos/formulario" class="btn btn-success">Confirmar Pedido</a>
+                                    <div class="carrito-item-info">
+                                        <p class="carrito-item-nombre"><%= item.producto.nombre %></p>
+                                        <p class="carrito-item-meta">
+                                            <%= item.producto.color %> &middot; Talla <%= item.producto.talla %>
+                                        </p>
+                                        <p class="carrito-item-precio-unitario"><%= pesos(item.producto.precio) %> c/u</p>
+
+                                        <button type="button" class="carrito-item-eliminar"
+                                            onclick="modal_eliminar('Carrito', 'Está seguro de eliminar <strong><%= item.producto.nombre %></strong> del carrito?', '/carritos/<%= item._id %>')"
+                                            data-bs-toggle="modal" data-bs-target="#confirmacion">
+                                            <span class="material-symbols-outlined">delete</span>
+                                            Eliminar
+                                        </button>
+                                    </div>
+
+                                    <!-- Cambiar la cantidad (PUT con method-override) -->
+                                    <form action="/carritos/<%= item._id %>?_method=PUT" method="post" class="carrito-item-cantidad">
+                                        <div class="cantidad-stepper">
+                                            <button type="button" class="cantidad-btn" onclick="cambiar_cantidad(this, -1)" aria-label="Quitar una unidad">−</button>
+                                            <input type="number" name="cantidad" value="<%= item.cantidad %>" min="1" max="<%= item.producto.stock %>"
+                                                class="cantidad-input" aria-label="Cantidad de <%= item.producto.nombre %>">
+                                            <button type="button" class="cantidad-btn" onclick="cambiar_cantidad(this, 1)" aria-label="Agregar una unidad">+</button>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary w-100 mt-2">Actualizar</button>
+                                    </form>
+
+                                    <div class="carrito-item-subtotal">
+                                        <span class="carrito-item-subtotal-label">Subtotal</span>
+                                        <span class="carrito-item-subtotal-valor"><%= pesos(subtotal) %></span>
+                                    </div>
+
+                                </div>
+                            <% }); %>
                         </div>
 
-                    <% } else { %>
+                        <a href="/catalogo" class="btn btn-outline-secondary mt-3">
+                            <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">arrow_back</span>
+                            Seguir comprando
+                        </a>
+                    </div>
 
-                        <div class="text-center mt-5">
-                            <p class="text-muted fs-5">Tu carrito está vacío.</p>
-                            <a href="/catalogo" class="btn btn-primary">Ver catálogo</a>
+                    <!-- Resumen de la compra -->
+                    <div class="col-lg-4">
+                        <div class="resumen-compra">
+                            <h2 class="resumen-compra-title">Resumen de compra</h2>
+
+                            <div class="resumen-compra-fila">
+                                <span>Productos</span>
+                                <span><%= lista.length %></span>
+                            </div>
+
+                            <div class="resumen-compra-fila">
+                                <span>Subtotal</span>
+                                <span><%= pesos(total) %></span>
+                            </div>
+
+                            <hr>
+
+                            <div class="resumen-compra-fila resumen-compra-total">
+                                <span>Total</span>
+                                <span><%= pesos(total) %></span>
+                            </div>
+
+                            <a href="/pedidos/formulario" class="btn btn-success w-100 mt-3">
+                                <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">task_alt</span>
+                                Confirmar Pedido
+                            </a>
                         </div>
-
-                    <% } %>
+                    </div>
 
                 </div>
+
+                <% } else { %>
+                    <div class="carrito-vacio">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <p class="fs-5 text-muted mt-2">Tu carrito está vacío.</p>
+                        <a href="/catalogo" class="btn btn-primary">Ver catálogo</a>
+                    </div>
+                <% } %>
 
             </main>
 
@@ -108,6 +139,31 @@
     </div>
 
     <%- include('../../partials/scripts'); %>
+
+    <script>
+        // Sube o baja la cantidad del producto sin pasarse del stock disponible.
+        function cambiar_cantidad(boton, cambio) {
+            var campo = boton.parentElement.querySelector('.cantidad-input');
+            var minimo = parseInt(campo.min, 10) || 1;
+            var maximo = parseInt(campo.max, 10);
+            var valor = parseInt(campo.value, 10);
+
+            if (isNaN(valor)) {
+                valor = minimo;
+            }
+
+            valor = valor + cambio;
+
+            if (valor < minimo) {
+                valor = minimo;
+            }
+            if (!isNaN(maximo) && valor > maximo) {
+                valor = maximo;
+            }
+
+            campo.value = valor;
+        }
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../../partials/head'); %>
+</head>
+
+<body>
+
+    <div class="app-shell d-lg-flex">
+
+        <%- include('../../partials/menu'); %>
+
+        <div class="app-content-wrap flex-grow-1 d-flex flex-column">
+
+            <%- include('../../partials/header'); %>
+
+            <main class="app-main">
+
+                <%- include('../../partials/notificaciones'); %>
+
+                <div class="page-header">
+                    <div>
+                        <h1 class="display-4">Catálogo de Productos</h1>
+                        <p class="text-muted small mb-0">
+                            <%= total %> producto<%= total === 1 ? "" : "s" %> disponible<%= total === 1 ? "" : "s" %>
+                        </p>
+                    </div>
+
+                    <a href="/carritos" class="btn btn-outline-secondary">
+                        <span class="material-symbols-outlined" style="font-size:18px; vertical-align:-4px;">shopping_cart</span>
+                        Ver mi carrito
+                    </a>
+                </div>
+
+                <!-- Filtros del catalogo -->
+                <form method="get" action="/catalogo" class="row g-2 mb-4 align-items-end">
+                    <div class="col-md-5">
+                        <input type="text" name="buscar" class="form-control" placeholder="Buscar producto..." value="<%= buscar %>">
+                    </div>
+                    <div class="col-md-4">
+                        <select name="categoria" class="form-select">
+                            <option value="">Todas las categorías</option>
+                            <% categorias.forEach(function(nombre) { %>
+                                <option value="<%= nombre %>" <%= categoria === nombre ? "selected" : "" %>><%= nombre %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">🔍 Buscar</button>
+                    </div>
+                    <% if (buscar || categoria) { %>
+                        <div class="col-md-1">
+                            <a href="/catalogo" class="btn btn-outline-secondary w-100">✕</a>
+                        </div>
+                    <% } %>
+                </form>
+
+                <!-- Grilla de productos -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3">
+                    <% productos.forEach(function(producto) { %>
+                        <%- include('../../partials/producto_card', { producto: producto }); %>
+                    <% }); %>
+
+                    <% if (productos.length === 0) { %>
+                        <div class="col-12">
+                            <div class="catalogo-vacio">
+                                <span class="material-symbols-outlined">inventory_2</span>
+                                <p class="mt-2 mb-0">No hay productos disponibles con estos filtros.</p>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <%- include('../../partials/paginacion', {
+                    filtros: "buscar=" + encodeURIComponent(buscar) + "&categoria=" + encodeURIComponent(categoria)
+                }); %>
+
+            </main>
+
+            <%- include('../../partials/footer'); %>
+
+        </div>
+    </div>
+
+    <%- include('../../partials/scripts'); %>
+</body>
+
+</html>

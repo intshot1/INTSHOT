@@ -29,69 +29,71 @@
                         </a>
                     </div>
 
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Imagen</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Descripción</th>
-                                <th scope="col">Categoria</th>
-                                <th scope="col">Talla</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% var lista = (typeof productos !== "undefined") ? productos : []; %>
-                            <% lista.forEach(function(producto) { %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <% if (producto.imagen) { %>
-                                            <img src="<%=producto.imagen%>" alt="<%=producto.nombre%>" style="height:50px; width:50px; object-fit:cover; border-radius:6px;">
-                                        <% } else { %>
-                                            <img src="/img/Logo-INTSHOT.jpg" alt="Sin imagen" style="height:50px; width:50px; object-fit:cover; border-radius:6px; opacity:0.5;">
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <%=producto.nombre%>
-                                    </td>
-                                    <td>
-                                        <%=producto.color%>
-                                    </td>
-                                    <td>
-                                        <%=producto.descripcion%>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-secondary"><%=producto.categoria%></span>
-                                    </td>
-                                    <td>
-                                        <%=producto.talla%>
-                                    </td>
-                                    <td>
-                                        <%=producto.stock%>
-                                    </td>
-                                    <td>
-                                        $<%=producto.precio%>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-outline-info btn-sm"
-                                            onclick="modalVer('<%=producto.nombre%>', '<%=producto.color%>', '<%=producto.talla%>', '<%=producto.categoria%>', '<%=producto.stock%>', '<%=producto.precio%>', '<%=producto.descripcion%>')"
-                                            data-bs-toggle="modal" data-bs-target="#ModalProductoVer">Ver detalles</button>
-
-                                        <button class="btn btn-info btn-sm"
-                                            onclick="modalEditar('<%=producto.nombre%>', '<%=producto.color%>', '<%=producto.talla%>', '<%=producto.categoria%>', '<%=producto.stock%>', '<%=producto.precio%>', '<%=producto.descripcion%>', '<%=producto.imagen%>')"
-                                            data-bs-toggle="modal" data-bs-target="#ModalProductoEditar">Editar</button>
-
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="modal_eliminar('Producto', 'Está seguro de eliminar el producto <strong><%=producto.nombre%></strong>?', '/productos/<%=producto.nombre%>')"
-                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                    </td>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Color</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Talla</th>
+                                    <th scope="col">Stock</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Acciones</th>
                                 </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% var lista = (typeof productos !== "undefined") ? productos : []; %>
+                                <% lista.forEach(function(producto) { %>
+                                    <tr>
+                                        <td>
+                                            <% if (producto.imagen) { %>
+                                                <img src="<%=producto.imagen%>" alt="<%=producto.nombre%>" style="height:50px; width:50px; object-fit:cover; border-radius:6px;">
+                                            <% } else { %>
+                                                <img src="/img/Logo-INTSHOT.jpg" alt="Sin imagen" style="height:50px; width:50px; object-fit:cover; border-radius:6px; opacity:0.5;">
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%=producto.nombre%>
+                                        </td>
+                                        <td>
+                                            <%=producto.color%>
+                                        </td>
+                                        <td>
+                                            <%=producto.descripcion%>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary"><%=producto.categoria%></span>
+                                        </td>
+                                        <td>
+                                            <%=producto.talla%>
+                                        </td>
+                                        <td>
+                                            <%=producto.stock%>
+                                        </td>
+                                        <td>
+                                            <%= pesos(producto.precio) %>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-info btn-sm"
+                                                onclick="modalVer('<%=producto.nombre%>', '<%=producto.color%>', '<%=producto.talla%>', '<%=producto.categoria%>', '<%=producto.stock%>', '<%=producto.precio%>', '<%=producto.descripcion%>')"
+                                                data-bs-toggle="modal" data-bs-target="#ModalProductoVer">Ver detalles</button>
+    
+                                            <button class="btn btn-info btn-sm"
+                                                onclick="modalEditar('<%=producto.nombre%>', '<%=producto.color%>', '<%=producto.talla%>', '<%=producto.categoria%>', '<%=producto.stock%>', '<%=producto.precio%>', '<%=producto.descripcion%>', '<%=producto.imagen%>')"
+                                                data-bs-toggle="modal" data-bs-target="#ModalProductoEditar">Editar</button>
+    
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Producto', 'Está seguro de eliminar el producto <strong><%=producto.nombre%></strong>?', '/productos/<%=producto.nombre%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 

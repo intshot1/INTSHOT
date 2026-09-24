@@ -8,7 +8,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:restart": "pm2 restart intshot --update-env",
+    "pm2:stop": "pm2 stop intshot",
+    "pm2:delete": "pm2 delete intshot",
+    "pm2:logs": "pm2 logs intshot"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

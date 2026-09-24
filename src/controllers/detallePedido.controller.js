@@ -1,4 +1,5 @@
 const DetallePedido = require('../models/detallePedido.model');
+const Pedido = require('../models/pedido.model');
 
 /**
  * Controlador de DetallePedido.
@@ -13,10 +14,18 @@ exports.formulario = async (req, res) => {
   res.render('pages/detallePedidos/registrar', { mensaje: "" });
 }
 
-// Lista todos los detalles de pedido, mostrando pedido y producto relacionados.
+// Lista los detalles de pedido, mostrando pedido y producto relacionados.
+// El cliente solo ve los detalles de sus propios pedidos.
 exports.consultar = async (req, res) => {
   try {
-    const detalles = await DetallePedido.find().populate('pedido').populate('producto');
+    let filtro = {};
+
+    if (req.usuario.rol === 'Cliente') {
+      const misPedidos = await Pedido.find({ usuario: req.usuario.id });
+      filtro = { pedido: { $in: misPedidos.map((pedido) => pedido._id) } };
+    }
+
+    const detalles = await DetallePedido.find(filtro).populate('pedido').populate('producto');
     res.render('pages/detallePedidos/index', { detalles: detalles, mensaje: "" });
   } catch (error) {
     res.status(500).json({ error: error.message });

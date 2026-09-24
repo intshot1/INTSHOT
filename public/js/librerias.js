@@ -27,3 +27,52 @@ function marcarMenu() {
 window.addEventListener("DOMContentLoaded", function () {
     marcarMenu();
 });
+
+// Switch de modo oscuro/claro.
+// El tema ya viene aplicado desde el <head> (partials/head.ejs); aqui solo se
+// maneja el cambio y se guarda la preferencia en el navegador.
+(function () {
+    var switches = document.querySelectorAll('.theme-toggle');
+    if (!switches.length) return;
+
+    var esOscuro = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+
+    function pintarSwitches() {
+        switches.forEach(function (boton) {
+            boton.setAttribute('aria-pressed', esOscuro ? 'true' : 'false');
+            boton.setAttribute('aria-label', esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+            var icono = boton.querySelector('.theme-toggle-icon');
+            if (icono) {
+                icono.textContent = esOscuro ? 'dark_mode' : 'light_mode';
+            }
+        });
+    }
+
+    pintarSwitches();
+
+    switches.forEach(function (boton) {
+        boton.addEventListener('click', function () {
+            esOscuro = !esOscuro;
+            document.documentElement.setAttribute('data-bs-theme', esOscuro ? 'dark' : 'light');
+            try {
+                localStorage.setItem('intshot-theme', esOscuro ? 'dark' : 'light');
+            } catch (e) {}
+            pintarSwitches();
+        });
+    });
+})();
+
+// Muestra u oculta la contrasena en los formularios de login y registro.
+document.querySelectorAll('.toggle-password').forEach(function (boton) {
+    boton.addEventListener('click', function () {
+        var campo = document.getElementById(boton.getAttribute('data-target'));
+        var icono = boton.querySelector('.material-symbols-outlined');
+        if (campo.type === 'password') {
+            campo.type = 'text';
+            icono.textContent = 'visibility_off';
+        } else {
+            campo.type = 'password';
+            icono.textContent = 'visibility';
+        }
+    });
+});

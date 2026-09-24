@@ -29,49 +29,51 @@
                         </a>
                     </div>
 
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Apellido</th>
-                                <th scope="col">Rol</th>
-                                <th scope="col">Correo</th>
-                                <th scope="col">Teléfono</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% var lista = (typeof usuarios !== "undefined") ? usuarios : []; %>
-                            <% lista.forEach(function(usuario) { %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%=usuario.nombre%>
-                                    </td>
-                                    <td>
-                                        <%=usuario.apellido%>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-secondary"><%=usuario.rol%></span>
-                                    </td>
-                                    <td>
-                                        <%=usuario.correo%>
-                                    </td>
-                                    <td>
-                                        <%=usuario.telefono%>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm"
-                                            onclick="modalEditar('<%=usuario.nombre%>', '<%=usuario.apellido%>', '<%=usuario.correo%>', '<%=usuario.telefono%>', '<%=usuario.rol%>')"
-                                            data-bs-toggle="modal" data-bs-target="#ModalUsuarioEditar">Editar</button>
-
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="modal_eliminar('Usuario', 'Está seguro de eliminar el usuario <strong><%=usuario.nombre%></strong>?', '/usuarios/<%=usuario.correo%>')"
-                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                    </td>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellido</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Acciones</th>
                                 </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% var lista = (typeof usuarios !== "undefined") ? usuarios : []; %>
+                                <% lista.forEach(function(usuario) { %>
+                                    <tr>
+                                        <td>
+                                            <%=usuario.nombre%>
+                                        </td>
+                                        <td>
+                                            <%=usuario.apellido%>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary"><%=usuario.rol%></span>
+                                        </td>
+                                        <td>
+                                            <%=usuario.correo%>
+                                        </td>
+                                        <td>
+                                            <%=usuario.telefono%>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-info btn-sm"
+                                                onclick="modalEditar('<%=usuario.nombre%>', '<%=usuario.apellido%>', '<%=usuario.correo%>', '<%=usuario.telefono%>', '<%=usuario.rol%>')"
+                                                data-bs-toggle="modal" data-bs-target="#ModalUsuarioEditar">Editar</button>
+    
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Usuario', 'Está seguro de eliminar el usuario <strong><%=usuario.nombre%></strong>?', '/usuarios/<%=usuario.correo%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 

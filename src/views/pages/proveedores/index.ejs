@@ -29,41 +29,43 @@
                         </a>
                     </div>
 
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Telefono</th>
-                                <th scope="col">Correo</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <% var lista = (typeof proveedores !== "undefined") ? proveedores : []; %>
-                            <% lista.forEach(function(proveedor) { %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <%=proveedor.nombre%>
-                                    </td>
-                                    <td>
-                                        <%=proveedor.telefono%>
-                                    </td>
-                                    <td>
-                                        <%=proveedor.correo%>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm"
-                                            onclick="modalEditar('<%=proveedor.nombre%>', '<%=proveedor.telefono%>', '<%=proveedor.correo%>')"
-                                            data-bs-toggle="modal" data-bs-target="#ModalProveedorEditar">Editar</button>
-
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="modal_eliminar('Proveedor', 'Está seguro de eliminar el proveedor <strong><%=proveedor.nombre%></strong>?', '/proveedores/<%=proveedor.correo%>')"
-                                            data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
-                                    </td>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Telefono</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Acciones</th>
                                 </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% var lista = (typeof proveedores !== "undefined") ? proveedores : []; %>
+                                <% lista.forEach(function(proveedor) { %>
+                                    <tr>
+                                        <td>
+                                            <%=proveedor.nombre%>
+                                        </td>
+                                        <td>
+                                            <%=proveedor.telefono%>
+                                        </td>
+                                        <td>
+                                            <%=proveedor.correo%>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-info btn-sm"
+                                                onclick="modalEditar('<%=proveedor.nombre%>', '<%=proveedor.telefono%>', '<%=proveedor.correo%>')"
+                                                data-bs-toggle="modal" data-bs-target="#ModalProveedorEditar">Editar</button>
+    
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="modal_eliminar('Proveedor', 'Está seguro de eliminar el proveedor <strong><%=proveedor.nombre%></strong>?', '/proveedores/<%=proveedor.correo%>')"
+                                                data-bs-toggle="modal" data-bs-target="#confirmacion">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 

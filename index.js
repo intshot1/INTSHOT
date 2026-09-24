@@ -23,6 +23,22 @@ app.use(express.json());
 // Permite simular PUT/DELETE desde formularios HTML, que solo soportan GET/POST.
 app.use(methodOverride('_method'));
 
+// Variables que estan disponibles en TODAS las vistas EJS.
+// "usuario" lo llena el middleware de autorizacion cuando hay sesion; aqui
+// solo se deja en null para que las paginas publicas no fallen al leerlo.
+app.use((req, res, next) => {
+    res.locals.usuario = null;
+    res.locals.ruta = req.path;
+    next();
+});
+
+// Muestra un numero como pesos colombianos. Ejemplo: 25000 -> $ 25.000
+// Se usa en las vistas asi: <%= pesos(producto.precio) %>
+app.locals.pesos = function (valor) {
+    const numero = Math.trunc(Number(valor ? valor.toString() : 0)) || 0;
+    return '$ ' + numero.toLocaleString('es-CO');
+};
+
 // Rutas de la aplicacion. Cada archivo agrupa las rutas de una entidad y
 // define la URL completa, por eso todos se montan sobre la raiz.
 app.use('/', require('./src/routes/auth.routes'));                  // landing, login, registro

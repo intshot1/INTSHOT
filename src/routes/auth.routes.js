@@ -9,6 +9,9 @@ router.get('/', authController.landing);
 router.get('/login', authController.mostrarLogin);
 router.post('/login', authController.login);
 
+// Cierra la sesion.
+router.get('/logout', authController.logout);
+
 // Formulario de registro publico.
 router.get('/registro', authController.mostrarRegistro);
 router.post('/registro', authController.registro);

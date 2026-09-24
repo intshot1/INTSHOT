@@ -20,6 +20,7 @@ if (!SECRET) {
 function generarToken(usuario) {
     const payload = {
         id: usuario._id,
+        nombre: `${usuario.nombre} ${usuario.apellido}`,
         correo: usuario.correo,
         rol: usuario.rol,
     };
