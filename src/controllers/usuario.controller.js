@@ -1,5 +1,6 @@
 const Usuario = require('../models/usuario.model');
 const emailService = require('../services/email.service');
+const logs = require('../services/logs');
 
 // Controlador de Usuario.
 
@@ -47,6 +48,8 @@ exports.registrar = async (req, res) => {
     }
 
     await Usuario.create(nuevoUsuario);
+
+    logs.guardarLog('usuarios.log', `Usuario registrado: ${nuevoUsuario.nombre} ${nuevoUsuario.apellido} (${nuevoUsuario.correo}) - rol ${nuevoUsuario.rol}`);
 
     // Mismo aviso que en el registro publico: el usuario nuevo se entera por
     // correo de que ya tiene una cuenta, aunque la haya creado un administrador.

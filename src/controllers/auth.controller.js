@@ -2,6 +2,7 @@ const Usuario = require('../models/usuario.model');
 const { generarToken } = require('../utils/jwt.util');
 const emailService = require('../services/email.service');
 const { usuarioLogueado } = require('../middlewares/auth.middleware');
+const logs = require('../services/logs');
 
 // Controlador de autenticacion.
 
@@ -89,8 +90,11 @@ exports.login = async (req, res) => {
         expires: expira,                                  // misma expiracion que el propio JWT
       });
 
+      logs.guardarLog('login.log', `Inicio de sesion exitoso: ${usuario.nombre} ${usuario.apellido} (${correo})`);
+
       res.redirect('/inicio');
     } else {
+      logs.guardarLog('login.log', `Inicio de sesion fallido: ${correo}`);
       res.render('pages/login', { mensaje: "Error: usuario o contraseña incorrectos" });
     }
   } catch (error) {

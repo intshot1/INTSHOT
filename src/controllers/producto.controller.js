@@ -1,4 +1,5 @@
 const Producto = require('../models/producto.model');
+const logs = require('../services/logs');
 
 // Controlador de Producto.
  
@@ -113,7 +114,8 @@ exports.registrar = async (req, res) => {
       imagen: req.body.imagen
     }
 
-    await Producto.create(nuevoProducto);
+    const productoCreado = await Producto.create(nuevoProducto);
+    logs.guardarLog('productos.log', `Producto registrado: ${productoCreado.nombre} - por ${req.usuario ? req.usuario.nombre : 'desconocido'}`);
     res.render('pages/productos/registrar', { mensaje: "Producto registrado exitosamente" });
 
   } catch (error) {
