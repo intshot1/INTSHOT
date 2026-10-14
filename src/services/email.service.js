@@ -21,12 +21,14 @@ const transporter = nodemailer.createTransport({
 });
 
 // Envia un correo. Recibe el destinatario, el asunto y el texto del mensaje.
-exports.sendEmail = async (email, subject, text) => {
+// "attachments" (archivos adjuntos) es opcional; hoy solo lo usa el backup.
+exports.sendEmail = async (email, subject, text, attachments = []) => {
     const mailOptions = {
         from: process.env.GMAIL_USER,
         to: email,
         subject: subject,
-        text: text
+        text: text,
+        attachments: attachments
     };
 
     try {
