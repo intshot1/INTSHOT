@@ -3,6 +3,8 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const methodOverride = require('method-override');
+const cron = require('node-cron');
+const backup = require('./src/services/backup.service');
 
 const app = express();
 
@@ -53,6 +55,12 @@ app.use('/', require('./src/routes/carrito.routes'));               // carrito d
 app.use('/', require('./src/routes/pago.routes'));                  // pagos
 app.use('/', require('./src/routes/movimientoInventario.routes'));  // movimientos de inventario
 app.use('/', require('./src/routes/movimientoContable.routes'));    // movimientos contables
+
+// Respaldo de la base de datos todos los dias a las 12:00 a.m. (minuto 0, hora 0).
+cron.schedule('0 0 * * *', async () => {
+    console.log('Realizando Backup de la Base de datos');
+    backup.backupDatabase();
+});
 
 const PORT = process.env.PORT || 3000;
 

@@ -3,3 +3,5 @@ node_modules/
 logs/
 *.log
 scripts/respaldo-zap.json
+backup/
+scripts/registro-horas.txt

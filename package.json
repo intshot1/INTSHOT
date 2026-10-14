@@ -14,7 +14,8 @@
     "pm2:restart": "pm2 restart intshot --update-env",
     "pm2:stop": "pm2 stop intshot",
     "pm2:delete": "pm2 delete intshot",
-    "pm2:logs": "pm2 logs intshot"
+    "pm2:logs": "pm2 logs intshot",
+    "backup": "node -e \"require('./src/services/backup.service').backupDatabase()\""
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^9.0.3",
     "method-override": "^3.0.0",
     "mongoose": "^9.9.1",
+    "node-cron": "^4.6.0",
     "nodemailer": "^9.0.6",
     "path": "^0.12.7"
   },
